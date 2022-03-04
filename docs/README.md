@@ -253,6 +253,17 @@ You can use this to, for example, correct a spelling mistake or add a new piece 
 
 Updating records can be done either individually, or in bulk.
 
+# Error handling
+Not only are errors returned via the HTTP methods, but the API returns a status for each of the individual records included in the bulk import.
+This value is populated in the field "statusCode" and is modelled off HTTP response codes.
+
+We recommend looping through the responses to ensure that each visitor API record, has imported successfully.
+
+A succcessful import will have the "statusCode" field for example, populated with the value of 200, whereas an error during import, will have the error 500.
+Other possible responses are the codes 400 and 409.
+
+If the error 500 appears during import, please contact support@konduko.com.
+
 # Prepare for switching to the production environment
 
 Once your testing with the Visitor API on the staging environment of Konduko Cloud is complete, you can switch to using the live production environment.
