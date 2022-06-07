@@ -89,7 +89,7 @@ The JSON document for a request is what is found below:
     "title": "string",
     "first_name": "string",
     "last_name": "string",
-    "langauge": "string",
+    "language": "string",
     "phone": "string",
     "job_title": "string",
     "company": "string",
@@ -118,17 +118,42 @@ If any of the required fields are missing you will receive a
 
 > HTTP/1.1 400 Bad Request
 
+Fields with minimum requirements are:
+
+- **bar_code** --> Should have a minimum of 5 characters
+- **email** --> Disposable temporary emails like @yopmail.com are not allowed
+- **country** --> The api uses ISO_3166 to validate countries and accepts name, alpha 2 and alpha 3 standards. 
+- **badge_mac** --> Should be a valid mac address of 14 alphanumeric characters separated by colon. For instance: 3D:F2:C9:A6:B3:4F:FF.
+
+If any of these requirements are not met, the api will return 
+
+```json
+[
+  {
+    "status_code": 400,
+    "message": " Field name does not meet requirements",
+    "data": {
+      "bar_code": "string",
+      "badge_mac": "string"
+    }
+  }
+]
+```
+
+If any of the required fields are missing you will receive a
+
+> HTTP/1.1 400 Bad Request
+
 The response to any valid request will be
 
 ```json
 [
   {
+    "status_code": 0,
     "message": "string",
-    "statusCode": 0,
-    "error": ["string"],
     "data": {
-      "barCode": "string",
-      "badgeMAC": "string"
+      "bar_code": "string",
+      "badge_mac": "string"
     }
   }
 ]
@@ -177,7 +202,7 @@ Where visitor_data.json is:
 [
   {
     "bar_code": "12300001",
-    "badge_mac": "ABCDEF000001",
+    "badge_mac": "3D:F2:C9:A6:B3:4F:FF",
     "first_name": "Test",
     "last_name": "User",
     "email": "test.user@testing.com"
@@ -194,12 +219,11 @@ with the following body:
 ```json
 [
   {
+    "status_code": 200,
     "message": "OK",
-    "statusCode": 200,
-    "error": [],
     "data": {
-      "barCode": "12300001",
-      "badgeMAC": "ABCDEF000001"
+      "bar_code": "12300001",
+      "badge_mac": "3D:F2:C9:A6:B3:4F:FF"
     }
   }
 ]
@@ -210,12 +234,11 @@ If you send the same request again the following will be returned:
 ```json
 [
   {
+    "status_code": 200,
     "message": "Visitor Updated",
-    "statusCode": 200,
-    "error": [],
     "data": {
-      "barCode": "12300001",
-      "badgeMAC": "ABCDEF000001"
+      "bar_code": "12300001",
+      "badge_mac": "3D:F2:C9:A6:B3:4F:FF"
     }
   }
 ]
@@ -228,16 +251,16 @@ Posting Visitor records in bulk is exactly the same as Posting a single Visitor 
 Single Visitor Record
 
 ```json
-[{ "bar_code": "12300001", "badge_mac": "ABCDEF000001" }]
+[{ "bar_code": "12300001", "badge_mac": "3D:F2:C9:A6:B3:4F:FF" }]
 ```
 
 Bulk Visitor Record
 
 ```json
 [
-  { "bar_code": "12300001", "badge_mac": "ABCDEF000001" },
-  { "bar_code": "12300002", "badge_mac": "ABCDEF000002" },
-  { "bar_code": "12300003", "badge_mac": "ABCDEF000003" }
+  { "bar_code": "12300001", "badge_mac": "3D:F2:C9:A6:B3:4F:FF" },
+  { "bar_code": "12300002", "badge_mac": "3D:F2:C9:A6:B3:4F:GG" },
+  { "bar_code": "12300003", "badge_mac": "3D:F2:C9:A6:B3:4F:HH" }
 ]
 ```
 
@@ -245,9 +268,9 @@ Bulk Visitor Record
 
 Updating Visitor records is exactly the same process as submitting them for the first time.
 
-If you POST a Visitor record with a barCode that matches a Visitor that already exists in that Event, then any fields in your POST will overwrite any existing fields stored in the Konduko Cloud.
+If you POST a Visitor record with a barcode that matches a Visitor that already exists in that Event, then any fields in your POST will overwrite any existing fields stored in the Konduko Cloud.
 
-The sole exception to the above is that sending a Visitor record with a new NFC badgeMAC will add to the list of NFC Badges associated with that Visitor.
+The sole exception to the above is that sending a Visitor record with a new NFC badge mac will add to the list of NFC Badges associated with that Visitor.
 
 You can use this to, for example, correct a spelling mistake or add a new piece of information into a field that was previously blank.
 
@@ -255,11 +278,11 @@ Updating records can be done either individually, or in bulk.
 
 # Error handling
 Not only are errors returned via the HTTP methods, but the API returns a status for each of the individual records included in the bulk import.
-This value is populated in the field "statusCode" and is modelled off HTTP response codes.
+This value is populated in the field "status_code" and is modelled off HTTP response codes.
 
 We recommend looping through the responses to ensure that each visitor API record, has imported successfully.
 
-A succcessful import will have the "statusCode" field for example, populated with the value of 200, whereas an error during import, will have the error 500.
+A succcessful import will have the "status_code" field for example, populated with the value of 200, whereas an error during import, will have the error 500.
 Other possible responses are the codes 400 and 409.
 
 If the error 500 appears during import, please contact support@konduko.com.
