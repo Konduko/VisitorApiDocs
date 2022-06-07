@@ -131,7 +131,7 @@ If any of these requirements are not met, the api will return
 [
   {
     "status_code": 400,
-    "message": " Field name does not meet requirements",
+    "message": " FIELD NAME does not meet minimum requirements",
     "data": {
       "bar_code": "string",
       "badge_mac": "string"
