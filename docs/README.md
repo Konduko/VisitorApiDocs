@@ -20,6 +20,15 @@ We recommend that you do the following steps to integrate your system with the K
 5. Prepare for switching to the production environment
 6. Bulk Upload Visitor records for your Event
 
+# Recent Updates
+
+The following recent improvements were made to the api:
+
+- Fix a typo in the `language` field
+- Added minimum requirements for some fields. Check the [Fields with minimum requirements are](https://konduko.github.io/VisitorApiDocs/#/:~:text=Fields%20with%20minimum%20requirements) section for more details
+- Response now uses `snake_case` naming convention
+- Removed `error` field from Response, `message` field should be used instead
+
 # Initial Setup
 
 Konduko's API sends and receives data in JSON format over HTTPS/REST.
@@ -122,16 +131,16 @@ Fields with minimum requirements are:
 
 - **bar_code** --> Should have a minimum of 5 characters
 - **email** --> Disposable temporary emails like @yopmail.com are not allowed
-- **country** --> The api uses ISO_3166 to validate countries and accepts name, alpha 2 and alpha 3 standards. 
+- **country** --> The api uses ISO_3166 to validate countries and accepts name, alpha 2 and alpha 3 standards.
 - **badge_mac** --> Should be a valid mac address of 14 alphanumeric characters separated by colon. For instance: 3D:F2:C9:A6:B3:4F:FF.
 
-If any of these requirements are not met, the api will return 
+If any of these requirements are not met, the api will return
 
 ```json
 [
   {
     "status_code": 400,
-    "message": " FIELD NAME does not meet minimum requirements",
+    "message": " <field_name> does not meet minimum requirements",
     "data": {
       "bar_code": "string",
       "badge_mac": "string"
@@ -277,6 +286,7 @@ You can use this to, for example, correct a spelling mistake or add a new piece 
 Updating records can be done either individually, or in bulk.
 
 # Error handling
+
 Not only are errors returned via the HTTP methods, but the API returns a status for each of the individual records included in the bulk import.
 This value is populated in the field "status_code" and is modelled off HTTP response codes.
 
