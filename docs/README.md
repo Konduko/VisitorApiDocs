@@ -110,6 +110,7 @@ The JSON document for a request is what is found below:
     "postal_code": "string",
     "country": "string",
     "visitor_type": "string",
+    "user_account_type": "number",
     "extra_data": {}
   }
 ]
@@ -133,6 +134,7 @@ Fields with minimum requirements are:
 - **email** --> Disposable temporary emails like @yopmail.com are not allowed
 - **country** --> The api uses ISO_3166 to validate countries and accepts name, alpha 2 and alpha 3 standards.
 - **badge_mac** --> Should be a valid mac address of 14 alphanumeric characters separated by colon. For instance: 3D:F2:C9:A6:B3:4F:FF.
+- **user_account_type** --> Attendee User Account Type values are: 1 = Attendee – 2 = Exhibitor.
 
 If any of these requirements are not met, the api will return
 
@@ -253,7 +255,7 @@ If you send the same request again the following will be returned:
 ]
 ```
 
-## Example 3: POST Visitor records in bulk
+## Example 2: POST Visitor records in bulk
 
 Posting Visitor records in bulk is exactly the same as Posting a single Visitor record, but where the JSON object has been extended to include multiple Visitor records:
 
